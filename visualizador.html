@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Visualizador Geo</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .seccion { display: none; margin-top: 10px; padding: 10px; border: 1px solid #ddd; background: #f4f4f4; }
+        .activo { display: block; }
+        input { width: 60px; }
+        #map { height: 400px; width: 100%; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <h3>Convertidor y Visualizador</h3>
+    <select id="selector" onchange="mostrarCampos()">
+        <option value="">Selecciona el formato...</option>
+        <option value="dec">Grados Decimales</option>
+        <option value="dms">DMS (G, M, S)</option>
+    </select>
+
+    <!-- Campos Decimales -->
+    <div id="dec" class="seccion">
+        Lat: <input type="number" id="latDec" step="any"> 
+        Lon: <input type="number" id="lonDec" step="any"><br>
+        <button onclick="procesar('dec')">Ubicar en Mapa</button>
+    </div>
+
+    <!-- Campos DMS -->
+    <div id="dms" class="seccion">
+        Lat: <input type="number" id="latG">° <input type="number" id="latM">' <input type="number" id="latS">"<br>
+        Lon: <input type="number" id="lonG">° <input type="number" id="lonM">' <input type="number" id="lonS">"<br>
+        <button onclick="procesar('dms')">Ubicar en Mapa</button>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+        var map = L.map('map').setView([19.43, -99.13], 6);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        var marker = L.marker([0,0]).addTo(map);
+
+        function mostrarCampos() {
+            document.getElementById('dec').className = 'seccion';
+            document.getElementById('dms').className = 'seccion';
+            var sel = document.getElementById('selector').value;
+            if(sel) document.getElementById(sel).className = 'seccion activo';
+        }
+
+        function procesar(tipo) {
+            var lat, lon;
+            if(tipo === 'dec') {
+                lat = parseFloat(document.getElementById('latDec').value);
+                lon = parseFloat(document.getElementById('lonDec').value);
+            } else {
+                lat = parseFloat(document.getElementById('latG').value || 0) + (parseFloat(document.getElementById('latM').value || 0)/60) + (parseFloat(document.getElementById('latS').value || 0)/3600);
+                lon = -(parseFloat(document.getElementById('lonG').value || 0) + (parseFloat(document.getElementById('lonM').value || 0)/60) + (parseFloat(document.getElementById('lonS').value || 0)/3600));
+            }
+            marker.setLatLng([lat, lon]);
+            map.setView([lat, lon], 12);
+        }
+    </script>
+</body>
+</html>
