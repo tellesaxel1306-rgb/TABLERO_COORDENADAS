@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: sans-serif; font-size: 14px; }
+        .contenedor { border: 1px solid #ccc; background: #f4f4f4; padding: 15px; width: 350px; }
+        .seccion { display: none; margin-top: 10px; }
+        .activo { display: block; }
+        input { width: 70px; }
+        button { margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+<h3>Convertidor y Visualizador</h3>
+
+<select id="selector" onchange="cambiar()">
+    <option value="">Selecciona formato...</option>
+    <option value="dec">Grados Decimales</option>
+    <option value="dms">DMS</option>
+</select>
+
+<div id="dec" class="seccion contenedor">
+    Lat: <input type="number" id="latDec" step="any"> 
+    Lon: <input type="number" id="lonDec" step="any"><br>
+    <button onclick="alert('Funcionalidad de mapa conectada')">Ubicar en Mapa</button>
+</div>
+
+<div id="dms" class="seccion contenedor">
+    Lat: <input type="number" id="latG">° <input type="number" id="latM">' <input type="number" id="latS">"<br>
+    Lon: <input type="number" id="lonG">° <input type="number" id="lonM">' <input type="number" id="lonS">"<br>
+    <button onclick="alert('Funcionalidad de mapa conectada')">Ubicar en Mapa</button>
+</div>
+
+<script>
+    function cambiar() {
+        document.getElementById('dec').className = 'seccion contenedor';
+        document.getElementById('dms').className = 'seccion contenedor';
+        var sel = document.getElementById('selector').value;
+        if(sel) document.getElementById(sel).className = 'seccion contenedor activo';
+    }
+</script>
+</body>
+</html>
+"""
+
+with open(ruta_completa, "w", encoding="utf-8") as f:
+    f.write(contenido_html)
+
+print(f"Archivo generado en: {ruta_completa}")
